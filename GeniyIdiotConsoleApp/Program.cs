@@ -38,16 +38,11 @@
             }
         }
 
-        static void Main(string[] args)
+        // задать вопросы
+        static int AskQuestions(Question[] questions)
         {
-            int countQuestions = 5;
-            Question[] questions = GetQuestions(countQuestions);
-
             int countRightAnswers = 0;
-
-            Shuffle(questions);
-
-            for (int i = 0; i < countQuestions; i++)
+            for (int i = 0; i < questions.Length; i++)
             {
                 Console.WriteLine("Вопрос №" + (i + 1));
                 Console.WriteLine(questions[i].text);
@@ -61,6 +56,17 @@
                     countRightAnswers++;
                 }
             }
+            return countRightAnswers;
+        }
+
+        static void Main(string[] args)
+        {
+            int countQuestions = 5;
+            Question[] questions = GetQuestions(countQuestions);
+
+            Shuffle(questions);
+
+            int countRightAnswers = AskQuestions(questions);
 
             Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
 
