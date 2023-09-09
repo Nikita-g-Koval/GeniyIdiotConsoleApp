@@ -1,4 +1,6 @@
-﻿namespace GeniyIdiotConsoleApp
+﻿using System.Xml.Linq;
+
+namespace GeniyIdiotConsoleApp
 {
     internal class Program
     {
@@ -39,7 +41,7 @@
         }
 
         // задать вопросы
-        static int AskQuestions(Question[] questions)
+        static int RunTest(Question[] questions)
         {
             int countRightAnswers = 0;
             for (int i = 0; i < questions.Length; i++)
@@ -59,6 +61,28 @@
             return countRightAnswers;
         }
 
+        static bool RepeatOrNot(string name)
+        {
+            bool result = true;
+            Console.WriteLine($"{name}, вы хотите повторить тест? (Введите \"Да\" или \"Нет\")");
+
+            while (true)
+            { 
+                string userAnswer = Console.ReadLine();
+                if (userAnswer == "Нет")
+                {
+                    result = false;
+                    break;
+                }
+                else if (userAnswer == "Да")
+                    break;
+
+                Console.WriteLine($"{name}, вы ввели некорректные данные! (Введите \"Да\" или \"Нет\")!");
+            }
+
+            return result;
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Здравствуйте! Напишите ваше имя.");
@@ -67,15 +91,23 @@
             int countQuestions = 5;
             Question[] questions = GetQuestions(countQuestions);
 
-            Shuffle(questions);
+            bool repeat = true;
 
-            int countRightAnswers = AskQuestions(questions);
+            while (repeat)
+            {
+                Shuffle(questions);
 
-            Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
+                int countRightAnswers = RunTest(questions);
 
-            string[] diagnoses = GetDiagnoses();
+                Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
 
-            Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
+                string[] diagnoses = GetDiagnoses();
+
+                Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
+
+                repeat = RepeatOrNot(name);
+            }
+
         }
     }
 }
