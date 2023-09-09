@@ -41,6 +41,29 @@ namespace GeniyIdiotConsoleApp
             }
         }
 
+        // получить целочисленный ответ от пользователя с проверкой данных
+        static int GetIntAnswer()
+        {
+            Console.WriteLine("Введите ответ(любое целочисленное число)");
+            string inputAnswer = Console.ReadLine();
+
+            int answer;
+
+            while (true)
+            {
+                if (!int.TryParse(inputAnswer, out answer))
+                {
+                    Console.WriteLine("Вы ввели некорректные данные! Попробуйте снова! Примеры корректных данных(любое целочисленное число): \"3\", \"120\", \"51\".");
+                }
+                else
+                    break;
+
+                inputAnswer = Console.ReadLine();
+            }
+
+            return answer;
+        }
+
         // задать вопросы
         static int RunTest(Question[] questions)
         {
@@ -50,7 +73,7 @@ namespace GeniyIdiotConsoleApp
                 Console.WriteLine("Вопрос №" + (i + 1));
                 Console.WriteLine(questions[i].text);
 
-                int userAnswer = Convert.ToInt32(Console.ReadLine());
+                int userAnswer = GetIntAnswer();
 
                 int rightAnswer = questions[i].answer;
 
@@ -62,10 +85,11 @@ namespace GeniyIdiotConsoleApp
             return countRightAnswers;
         }
 
-        static bool RepeatOrNot(string name)
+        // повторить тест или нет
+        static bool RepeatOrNot()
         {
             bool result = true;
-            Console.WriteLine($"{name}, вы хотите повторить тест? (Введите \"Да\" или \"Нет\")");
+            Console.WriteLine("Вы хотите повторить тест? (Введите \"Да\" или \"Нет\")");
 
             while (true)
             { 
@@ -78,12 +102,13 @@ namespace GeniyIdiotConsoleApp
                 else if (userAnswer == "Да")
                     break;
 
-                Console.WriteLine($"{name}, вы ввели некорректные данные! (Введите \"Да\" или \"Нет\")!");
+                Console.WriteLine($"Вы ввели некорректные данные! (Введите \"Да\" или \"Нет\")!");
             }
 
             return result;
         }
 
+        // спросить у пользователя имя
         static string AskName()
         {
             string name;
@@ -122,7 +147,7 @@ namespace GeniyIdiotConsoleApp
 
                 Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
 
-                repeat = RepeatOrNot(name);
+                repeat = RepeatOrNot();
             }
 
         }
