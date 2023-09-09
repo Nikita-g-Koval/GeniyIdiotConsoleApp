@@ -61,6 +61,9 @@
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Здравствуйте! Напишите ваше имя.");
+            string name = Console.ReadLine();
+
             int countQuestions = 5;
             Question[] questions = GetQuestions(countQuestions);
 
@@ -72,7 +75,7 @@
 
             string[] diagnoses = GetDiagnoses();
 
-            Console.WriteLine("Ваш диагноз:" + diagnoses[countRightAnswers]);
+            Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
         }
     }
 }
