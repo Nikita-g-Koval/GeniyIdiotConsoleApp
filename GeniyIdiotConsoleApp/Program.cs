@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace GeniyIdiotConsoleApp
 {
@@ -83,10 +84,26 @@ namespace GeniyIdiotConsoleApp
             return result;
         }
 
+        static string AskName()
+        {
+            string name;
+
+            Console.WriteLine("Здравствуйте! Напишите ваше имя.");
+            while (true)
+            {
+                name = Console.ReadLine();
+                if (!string.IsNullOrEmpty(name))
+                    break;
+                Console.WriteLine("Имя не должно быть пустым!");
+            }
+
+            return name;
+        }
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Здравствуйте! Напишите ваше имя.");
-            string name = Console.ReadLine();
+            
+            string name = AskName();
 
             int countQuestions = 5;
             Question[] questions = GetQuestions(countQuestions);
