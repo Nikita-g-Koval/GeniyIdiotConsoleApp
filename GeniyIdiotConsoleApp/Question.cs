@@ -8,13 +8,13 @@ namespace GeniyIdiotConsoleApp
 {
     internal class Question
     {
-        public string text { get; }
-        public int answer { get; }
+        public string Text { get; }
+        public int Answer { get; }
 
         public Question(string text, int answer)
         {
-            this.text = text;
-            this.answer = answer;
+            Text = text;
+            Answer = answer;
         }
     }
 }

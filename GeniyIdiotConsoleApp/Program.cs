@@ -2,6 +2,30 @@
 {
     internal class Program
     {
+        static void Main(string[] args)
+        {
+            string name = GetUserName();
+
+            int countQuestions = 5;
+            Question[] questions = GetQuestions(countQuestions);
+
+            bool repeat = true;
+
+            while (repeat)
+            {
+                Shuffle(questions);
+
+                int countRightAnswers = RunTest(questions);
+
+                Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
+
+                string[] diagnoses = GetDiagnoses();
+
+                Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
+
+                repeat = Repeat();
+            }
+        }
         // получить вопросы
         static Question[] GetQuestions(int countQuestions)
         {
@@ -39,7 +63,7 @@
         }
 
         // получить целочисленный ответ от пользователя с проверкой данных
-        static int GetIntAnswer()
+        static int GetIntUserAnswer()
         {
             Console.WriteLine("Введите ответ(любое целочисленное число)");
             string inputAnswer = Console.ReadLine();
@@ -68,11 +92,11 @@
             for (int i = 0; i < questions.Length; i++)
             {
                 Console.WriteLine("Вопрос №" + (i + 1));
-                Console.WriteLine(questions[i].text);
+                Console.WriteLine(questions[i].Text);
 
-                int userAnswer = GetIntAnswer();
+                int userAnswer = GetIntUserAnswer();
 
-                int rightAnswer = questions[i].answer;
+                int rightAnswer = questions[i].Answer;
 
                 if (userAnswer == rightAnswer)
                 {
@@ -83,7 +107,7 @@
         }
 
         // повторить тест или нет
-        static bool RepeatOrNot()
+        static bool Repeat()
         {
             bool result = true;
             Console.WriteLine("Вы хотите повторить тест? (Введите \"Да\" или \"Нет\")");
@@ -106,7 +130,7 @@
         }
 
         // спросить у пользователя имя
-        static string AskName()
+        static string GetUserName()
         {
             string name;
 
@@ -120,33 +144,6 @@
             }
 
             return name;
-        }
-
-        static void Main(string[] args)
-        {
-            
-            string name = AskName();
-
-            int countQuestions = 5;
-            Question[] questions = GetQuestions(countQuestions);
-
-            bool repeat = true;
-
-            while (repeat)
-            {
-                Shuffle(questions);
-
-                int countRightAnswers = RunTest(questions);
-
-                Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
-
-                string[] diagnoses = GetDiagnoses();
-
-                Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
-
-                repeat = RepeatOrNot();
-            }
-
         }
     }
 }
