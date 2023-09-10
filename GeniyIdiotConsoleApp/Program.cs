@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Xml.Linq;
-
-namespace GeniyIdiotConsoleApp
+﻿namespace GeniyIdiotConsoleApp
 {
     internal class Program
     {
