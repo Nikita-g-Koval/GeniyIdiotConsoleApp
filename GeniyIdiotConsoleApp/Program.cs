@@ -19,9 +19,9 @@
 
                 Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
 
-                string[] diagnoses = GetDiagnoses();
+                string diagnose = GetDiagnose(countQuestions, countRightAnswers);
 
-                Console.WriteLine($"{name}, ваш диагноз: {diagnoses[countRightAnswers]}");
+                Console.WriteLine($"{name}, ваш диагноз: {diagnose}");
 
                 repeat = Repeat();
             }
@@ -39,16 +39,39 @@
         }
 
         // получить диагнозы
-        static string[] GetDiagnoses()
+        static string GetDiagnose(int countQuestions, int countRightAnswers)
         {
             string[] diagnoses = new string[6];
-            diagnoses[0] = "кретин";
-            diagnoses[1] = "идиот";
-            diagnoses[2] = "дурак";
-            diagnoses[3] = "нормальный";
-            diagnoses[4] = "талант";
-            diagnoses[5] = "гений";
-            return diagnoses;
+            diagnoses[0] = "кретин"; // < 10% правильных ответов
+            diagnoses[1] = "идиот"; // >= 10% и < 30%
+            diagnoses[2] = "дурак"; // >= 30% и < 60%
+            diagnoses[3] = "нормальный"; // >= 60% и < 85%
+            diagnoses[4] = "талант"; // >= 80% и < 95%
+            diagnoses[5] = "гений"; // >= 95%
+
+            int procent = countRightAnswers * 100 / countQuestions;
+            string result = diagnoses[0];
+
+            switch (procent)
+            {
+                case >= 10 and < 30:
+                    result = diagnoses[1];
+                    break;
+                case >= 30 and < 60:
+                    result = diagnoses[2];
+                    break;
+                case >= 60 and < 80:
+                    result = diagnoses[3];
+                    break;
+                case >= 80 and < 95:
+                    result = diagnoses[4];
+                    break;
+                case >=95:
+                    result = diagnoses[5];
+                    break;
+            }
+
+            return result;
         }
 
         // перемешать массив
