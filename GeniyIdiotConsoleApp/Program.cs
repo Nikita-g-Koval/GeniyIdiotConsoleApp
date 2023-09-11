@@ -49,10 +49,10 @@
             diagnoses[4] = "талант"; // >= 80% и < 95%
             diagnoses[5] = "гений"; // >= 95%
 
-            int procent = countRightAnswers * 100 / countQuestions;
+            int rightAnswersProcent = countRightAnswers * 100 / countQuestions;
             string result = diagnoses[0];
 
-            switch (procent)
+            switch (rightAnswersProcent)
             {
                 case >= 10 and < 30:
                     result = diagnoses[1];
