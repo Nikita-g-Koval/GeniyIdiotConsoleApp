@@ -4,26 +4,67 @@
     {
         static void Main(string[] args)
         {
-            string name = GetUserName();
+            Console.WriteLine("Здравствуйте, введите ваше имя!");
+            string userName = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(userName))
+            {
+                Console.WriteLine("Имя не должно быть пустым! Введите ещё раз.");
+                userName = Console.ReadLine();
+            }
 
             int countQuestions = 5;
             Question[] questions = GetQuestions(countQuestions);
+            string[] diagnoses = GetDiagnoses();
 
-            bool repeat = true;
+            bool start = false;
+            Console.WriteLine($"{userName}, хотите начать тест? Введите \"Да\" или \"Нет\".");
+            int userAnswer = ValidateUserAnswer(Console.ReadLine());
 
-            while (repeat)
+            while (userAnswer == 0)
             {
+                Console.WriteLine($"{userName}, вы ввели некорректные данные! Введите \"Да\" или \"Нет\".");
+                userAnswer = ValidateUserAnswer(Console.ReadLine());
+            }
+
+            while (userAnswer == 1)
+            {
+                Console.WriteLine("Тест запущен. На каждый вопрос вводите целочисленный ответ. Примеры: \"2\", \"15\", \"-7\".");
+                int rightAnswersCount = 0;
                 Shuffle(questions);
+                
+                for (int i = 0; i < questions.Length; i++)
+                {
+                    Console.WriteLine("Вопрос №" + (i + 1));
+                    Console.WriteLine(questions[i].Text + "\n" + "Введите ответ.");
 
-                int countRightAnswers = RunTest(questions);
+                    string input = Console.ReadLine();
+                    while (!IsInteger(input))
+                    {
+                        Console.WriteLine($"{userName}, вы ввели некорректные данные! Введите целочисленное число! Примеры: \"2\", \"15\", \"-7\".");
+                        input = Console.ReadLine();
+                    }
+                    userAnswer = Convert.ToInt32(input);
+                    Console.WriteLine("Ответ принят.");
 
-                Console.WriteLine("Количество правильных ответов: " + countRightAnswers);
+                    if (userAnswer == questions[i].Answer)
+                        rightAnswersCount++;
 
-                string diagnose = GetDiagnose(countQuestions, countRightAnswers);
+                }
 
-                Console.WriteLine($"{name}, ваш диагноз: {diagnose}");
+                Console.WriteLine("Количество правильных ответов: " + rightAnswersCount);
 
-                repeat = Repeat();
+                int diagnoseID = Diagnose(countQuestions, rightAnswersCount);
+                Console.WriteLine($"{userName}, ваш диагноз: {diagnoses[diagnoseID]}");
+
+                Console.WriteLine($"{userName}, вы хотите повторить тест? Введите \"Да\" или \"Нет\".");
+
+                userAnswer = ValidateUserAnswer(Console.ReadLine());
+                while (userAnswer == 0)
+                {
+                    Console.WriteLine($"{userName}, вы ввели некорректные данные! Введите \"Да\" или \"Нет\".");
+                    userAnswer = ValidateUserAnswer(Console.ReadLine());
+                }
             }
         }
         // получить вопросы
@@ -39,35 +80,41 @@
         }
 
         // получить диагнозы
-        static string GetDiagnose(int countQuestions, int countRightAnswers)
+        static string[] GetDiagnoses()
         {
             string[] diagnoses = new string[6];
-            diagnoses[0] = "кретин"; // < 10% правильных ответов
-            diagnoses[1] = "идиот"; // >= 10% и < 30%
-            diagnoses[2] = "дурак"; // >= 30% и < 60%
-            diagnoses[3] = "нормальный"; // >= 60% и < 85%
-            diagnoses[4] = "талант"; // >= 80% и < 95%
-            diagnoses[5] = "гений"; // >= 95%
+            diagnoses[0] = "кретин";
+            diagnoses[1] = "идиот";
+            diagnoses[2] = "дурак"; 
+            diagnoses[3] = "нормальный";
+            diagnoses[4] = "талант";
+            diagnoses[5] = "гений";
 
+            return diagnoses;
+        }
+
+        // вычислить диагноз
+        static int Diagnose(int countQuestions, int countRightAnswers)
+        {
             int rightAnswersProcent = countRightAnswers * 100 / countQuestions;
-            string result = diagnoses[0];
+            int result = 0;
 
             switch (rightAnswersProcent)
             {
                 case >= 10 and < 30:
-                    result = diagnoses[1];
+                    result = 1;
                     break;
                 case >= 30 and < 60:
-                    result = diagnoses[2];
+                    result = 2;
                     break;
                 case >= 60 and < 80:
-                    result = diagnoses[3];
+                    result = 3;
                     break;
                 case >= 80 and < 95:
-                    result = diagnoses[4];
+                    result = 4;
                     break;
                 case >=95:
-                    result = diagnoses[5];
+                    result = 5;
                     break;
             }
 
@@ -85,88 +132,25 @@
             }
         }
 
-        // получить целочисленный ответ от пользователя с проверкой данных
-        static int GetIntUserAnswer()
+        // проверка строки на целочисленное число
+        static bool IsInteger(string input)
         {
-            Console.WriteLine("Введите ответ(любое целочисленное число)");
-            string inputAnswer = Console.ReadLine();
+            int temp;
 
-            int answer;
-
-            while (true)
-            {
-                if (!int.TryParse(inputAnswer, out answer))
-                {
-                    Console.WriteLine("Вы ввели некорректные данные! Попробуйте снова! Примеры корректных данных(любое целочисленное число): \"3\", \"120\", \"51\".");
-                }
-                else
-                    break;
-
-                inputAnswer = Console.ReadLine();
-            }
-
-            return answer;
+            return int.TryParse(input, out temp);
         }
 
-        // задать вопросы
-        static int RunTest(Question[] questions)
+        // возвращает 1, если ответ "Да"; -1, если ответ "Нет"; 0, если ни "Да", ни "Нет"
+        static int ValidateUserAnswer(string userAnswer)
         {
-            int countRightAnswers = 0;
-            for (int i = 0; i < questions.Length; i++)
-            {
-                Console.WriteLine("Вопрос №" + (i + 1));
-                Console.WriteLine(questions[i].Text);
+            int result = 0;
 
-                int userAnswer = GetIntUserAnswer();
-
-                int rightAnswer = questions[i].Answer;
-
-                if (userAnswer == rightAnswer)
-                {
-                    countRightAnswers++;
-                }
-            }
-            return countRightAnswers;
-        }
-
-        // повторить тест или нет
-        static bool Repeat()
-        {
-            bool result = true;
-            Console.WriteLine("Вы хотите повторить тест? (Введите \"Да\" или \"Нет\")");
-
-            while (true)
-            { 
-                string userAnswer = Console.ReadLine();
-                if (userAnswer == "Нет")
-                {
-                    result = false;
-                    break;
-                }
-                else if (userAnswer == "Да")
-                    break;
-
-                Console.WriteLine($"Вы ввели некорректные данные! (Введите \"Да\" или \"Нет\")!");
-            }
+            if (userAnswer.ToLower() == "да")
+                result = 1;
+            else if (userAnswer.ToLower() == "нет")
+                result = -1;
 
             return result;
-        }
-
-        // спросить у пользователя имя
-        static string GetUserName()
-        {
-            string name;
-
-            Console.WriteLine("Здравствуйте! Напишите ваше имя.");
-            while (true)
-            {
-                name = Console.ReadLine();
-                if (!string.IsNullOrEmpty(name))
-                    break;
-                Console.WriteLine("Имя не должно быть пустым!");
-            }
-
-            return name;
         }
     }
 }
