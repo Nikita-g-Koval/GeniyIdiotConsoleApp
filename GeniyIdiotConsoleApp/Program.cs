@@ -4,12 +4,11 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Здравствуйте, введите ваше имя!");
+            Console.WriteLine("Здравствуйте, введите ваше имя! Длина имени не меньше двух символов. Можно использовать только латинский алфавит и цифры. Имя должно содержать хотя бы одну букву.");
             string userName = Console.ReadLine();
-
-            while (string.IsNullOrEmpty(userName))
+            while (!ValidateUserName(userName))
             {
-                Console.WriteLine("Имя не должно быть пустым! Введите ещё раз.");
+                Console.WriteLine("Имя не соответствует требованиям! Попробуйте ввести другое имя.");
                 userName = Console.ReadLine();
             }
 
@@ -151,6 +150,21 @@
                 result = -1;
 
             return result;
+        }
+
+        // проверка имени пользователя
+        static bool ValidateUserName(string userName)
+        {
+            if (!userName.Any(char.IsLetter) || userName.Length < 2)
+                return false;
+
+            for (int i = 0; i < userName.Length; i++)
+            {
+                char c = userName[i];
+                if (!(char.IsLetter(c) || char.IsDigit(c)))
+                    return false;
+            }
+            return true;
         }
     }
 }
