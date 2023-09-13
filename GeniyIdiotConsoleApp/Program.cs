@@ -155,15 +155,8 @@
         // проверка имени пользователя
         static bool ValidateUserName(string userName)
         {
-            if (!userName.Any(char.IsLetter) || userName.Length < 2)
+            if (userName.Any(x => !char.IsLetterOrDigit(x)) || !userName.Any(char.IsLetter) || userName.Length < 2)
                 return false;
-
-            for (int i = 0; i < userName.Length; i++)
-            {
-                char c = userName[i];
-                if (!(char.IsLetter(c) || char.IsDigit(c)))
-                    return false;
-            }
             return true;
         }
     }
