@@ -51,11 +51,13 @@
 
                 }
 
+                // вывод количества правильных ответов и диагноза
                 Console.WriteLine("Количество правильных ответов: " + rightAnswersCount);
-
+                
                 int diagnoseID = Diagnose(countQuestions, rightAnswersCount);
                 Console.WriteLine($"{userName}, ваш диагноз: {diagnoses[diagnoseID]}");
 
+                // запрос у пользователя на сохранение результатов теста
                 Console.WriteLine("Хотите сохранить результаты теста? Введите \"Да\" или \"Нет\".");
                 userAnswer = ValidateUserAnswer(Console.ReadLine());
                 while (userAnswer == 0)
@@ -69,6 +71,7 @@
                     Console.WriteLine("Результаты теста успешно сохранены.");
                 }
 
+                // запрос у пользователя на просмотр результатов предыдущих тестов
                 if (File.Exists(testResultPath))
                 {
                     Console.WriteLine("Хотите посмотреть сохранённые результаты тестов? Введите \"Да\" или \"Нет\".");
@@ -90,6 +93,7 @@
                     }
                 }
 
+                // запрос у пользователя на повтор теста
                 Console.WriteLine($"{userName}, хотите повторить тест? Введите \"Да\" или \"Нет\".");
                 userAnswer = ValidateUserAnswer(Console.ReadLine());
                 while (userAnswer == 0)
