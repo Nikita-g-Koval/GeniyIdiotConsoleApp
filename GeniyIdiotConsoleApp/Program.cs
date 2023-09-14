@@ -141,19 +141,19 @@
 
             switch (rightAnswersProcent)
             {
-                case >= 10 and < 30:
+                case >= 47 and < 50:
                     result = 1;
                     break;
-                case >= 30 and < 60:
+                case >= 50 and < 65:
                     result = 2;
                     break;
-                case >= 60 and < 80:
+                case >= 65 and < 75:
                     result = 3;
                     break;
-                case >= 80 and < 95:
+                case >= 75 and < 85:
                     result = 4;
                     break;
-                case >=95:
+                case >=85:
                     result = 5;
                     break;
             }
