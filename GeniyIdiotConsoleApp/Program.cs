@@ -56,8 +56,20 @@
                 int diagnoseID = Diagnose(countQuestions, rightAnswersCount);
                 Console.WriteLine($"{userName}, ваш диагноз: {diagnoses[diagnoseID]}");
 
-                Console.WriteLine($"{userName}, вы хотите повторить тест? Введите \"Да\" или \"Нет\".");
+                Console.WriteLine("Хотите сохранить результаты теста? Введите \"Да\" или \"Нет\".");
+                userAnswer = ValidateUserAnswer(Console.ReadLine());
+                while (userAnswer == 0)
+                {
+                    Console.WriteLine($"{userName}, вы ввели некорректные данные! Введите \"Да\" или \"Нет\".");
+                    userAnswer = ValidateUserAnswer(Console.ReadLine());
+                }
+                if (userAnswer == 1)
+                {
+                    SaveTestResult(userName, rightAnswersCount, diagnoses[diagnoseID]);
+                    Console.WriteLine("Результаты теста успешно сохранены.");
+                }
 
+                Console.WriteLine($"{userName}, хотите повторить тест? Введите \"Да\" или \"Нет\".");
                 userAnswer = ValidateUserAnswer(Console.ReadLine());
                 while (userAnswer == 0)
                 {
@@ -66,6 +78,10 @@
                 }
             }
         }
+
+        // путь к файлу с результатами теста
+        static string testResultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testResult.txt");
+
         // получить вопросы
         static Question[] GetQuestions(int countQuestions)
         {
@@ -158,6 +174,28 @@
             if (userName.Any(x => !char.IsLetterOrDigit(x)) || !userName.Any(char.IsLetter) || userName.Length < 2)
                 return false;
             return true;
+        }
+        
+        // сохранение результатов текста в файл
+        static void SaveTestResult(string userName, int rightAnswersCount, string diagnose)
+        {
+            FileInfo fileInfo = new FileInfo(testResultPath);
+            string testResult = $"{userName}, {rightAnswersCount}, {diagnose}";
+
+            if (!fileInfo.Exists)
+            {
+                using (StreamWriter sw = fileInfo.CreateText())
+                {
+                    sw.WriteLine(testResult);
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = fileInfo.AppendText())
+                {
+                    sw.WriteLine(testResult);
+                }
+            }
         }
     }
 }
