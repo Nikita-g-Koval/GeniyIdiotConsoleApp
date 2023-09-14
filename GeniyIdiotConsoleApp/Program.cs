@@ -69,6 +69,27 @@
                     Console.WriteLine("Результаты теста успешно сохранены.");
                 }
 
+                if (File.Exists(testResultPath))
+                {
+                    Console.WriteLine("Хотите посмотреть сохранённые результаты тестов? Введите \"Да\" или \"Нет\".");
+                    userAnswer = ValidateUserAnswer(Console.ReadLine());
+                    while (userAnswer == 0)
+                    {
+                        Console.WriteLine($"{userName}, вы ввели некорректные данные! Введите \"Да\" или \"Нет\".");
+                        userAnswer = ValidateUserAnswer(Console.ReadLine());
+                    }
+                    if (userAnswer == 1)
+                    {
+                        string[] testResults = GetTestResults();
+                        Console.WriteLine($"|| {"ФИО", -10} || {"кол-во правильных ответов", -25} || {"Диагноз", -10} ||");
+                        for (int j = 0; j < testResults.Length; j++)
+                        {
+                            string[] temp = testResults[j].Split(", ");
+                            Console.WriteLine($"|| {temp[0], -10} || {temp[1], -25} || {temp[2], -10} ||");
+                        }
+                    }
+                }
+
                 Console.WriteLine($"{userName}, хотите повторить тест? Введите \"Да\" или \"Нет\".");
                 userAnswer = ValidateUserAnswer(Console.ReadLine());
                 while (userAnswer == 0)
@@ -196,6 +217,16 @@
                     sw.WriteLine(testResult);
                 }
             }
+        }
+
+        // возвращает содержимое файла с результатами теста, если файла не существует возвращает null
+        static string[] GetTestResults()
+        {
+            if (File.Exists(testResultPath))
+            {
+                return File.ReadAllLines(testResultPath);
+            }
+            return null;
         }
     }
 }
