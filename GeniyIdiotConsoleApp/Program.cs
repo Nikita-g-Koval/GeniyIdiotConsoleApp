@@ -12,6 +12,7 @@
                 userName = Console.ReadLine();
             }
 
+            //11
             int countQuestions = 5;
             Question[] questions = GetQuestions(countQuestions);
             string[] diagnoses = GetDiagnoses();
